@@ -1,0 +1,54 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+
+  vm_names=['web01', 'dns01', 'db01']
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+
+  vm_names.each do |i|
+    config.vm.define "#{i}" do |node|
+    node.vm.box = "rockylinux/8"
+    # Dont mount host folder into vm
+    node.vm.synced_folder '.', '/vagrant', disabled: true
+
+    # Set vm hostname
+    node.vm.hostname = "#{i}.example.com"
+
+    # Set Virtualbox properties
+    node.vm.provider "virtualbox" do |vb|
+      # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      # Set cpu and memory
+      vb.cpus = 4
+      vb.memory = 4096
+      
+      # Fix dns not working
+      vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    end
+
+    # Run script inside vm upon completion
+    node.vm.provision "shell", inline: <<-SHELL
+      # Enable puppet repo
+      sudo rpm -Uvh https://yum.puppet.com/puppet7-release-el-8.noarch.rpm
+
+      # Install puppet, git and nano
+      yum install puppet-agent git nano -y
+
+      # Clone repo
+      mkdir /data/repos -p
+      cd /data/repos
+      git clone https://github.com/nc-fwi/CaC-example.git
+
+      # Apply manifests
+      /opt/puppetlabs/bin/puppet apply /data/repos/CaC-example/manifests
+    SHELL
+  end
+end
+end
