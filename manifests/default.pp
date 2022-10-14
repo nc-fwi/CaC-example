@@ -10,7 +10,7 @@ class common_settings {
 
   cron { 'git_clone':
     ensure  => 'present',
-    command => 'cd /data/repos/CaC-example && git reset --hard && git pull',
+    command => 'cd /data/repos/CaC-example && git pull',
     user    => root,
     minute  => '*/1',
   }
