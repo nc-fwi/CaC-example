@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.text text eol=lf
+*.sh text eol=lf
+*.pp text eol=lf
+*.py text eol=lf
+*.txt text eol=lf
+sudoers text eol=lf

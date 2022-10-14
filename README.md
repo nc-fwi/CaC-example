@@ -17,7 +17,7 @@ Vagrant will be used to setup a code defined virtual machine.
 
 # Run VM
 
-Command used to generate Vagrantfile `vagrant init almalinux/8`
+A Vagrantfile has been configured to create 3 vm: web01, dns01 and db01.
 
 Run the vm:
 
@@ -40,4 +40,45 @@ vagrant provision
 
 ```
 vagrant destroy default
+```
+
+# Puppet
+
+## Modules
+
+Install a module
+
+```
+git submodule add https://github.com/voxpupuli/puppet-firewalld modules/puppet-firewalld
+
+git rm modules/puppet-firewalld
+```
+
+Remove a module
+
+```
+git rm --cached modules/puppet-firewalld
+rm -rf modules/puppet-firewalld
+```
+
+Delete entry in .gitmodules
+
+```
+[submodule "modules/puppet-firewalld"]
+	path = modules/puppet-firewalld
+	url = https://github.com/voxpupuli/puppet-firewalld
+```
+
+Delete entry in .git/config
+
+```
+[submodule "modules/puppet-firewalld"]
+        url = https://github.com/voxpupuli/puppet-firewalld
+        active = true
+```
+
+Delete module in .git
+
+```
+rm -rf .git/modules/modules/puppet-firewalld/
 ```
