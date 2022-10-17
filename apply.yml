@@ -1,0 +1,54 @@
+- hosts: "all"
+  become: true
+  vars:
+    puppet_files: '/etc/puppetlabs/code/environments/production/files'
+    puppet_manifests: '/etc/puppetlabs/code/environments/production/manifests'
+  tasks:
+    - name: Delete puppet files directory
+      file:
+        state: absent
+        path: "{{ puppet_files }}"
+    - name: Delete puppet manifests directory
+      file:
+        state: absent
+        path: "{{ puppet_manifests }}"
+
+    # Ensure that directories exist
+    - name: Create puppet files directory
+      file:
+        path: "{{ puppet_files }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Create puppet manifests directory
+      file:
+        path: "{{ puppet_manifests }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    # Copy manifests and files to hosts
+    - name: Copy puppet files to hosts
+      ansible.builtin.copy:
+        src: files/
+        dest: "{{ puppet_files }}"
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Copy puppet manifests to hosts
+      ansible.builtin.copy:
+        src: manifests/
+        dest: "{{ puppet_manifests }}"
+        owner: root
+        group: root
+        mode: '0755'
+
+    # Execute puppet
+    - name: Run puppet
+      shell: "/opt/puppetlabs/bin/puppet apply --color=false --detailed-exitcodes {{ puppet_manifests }}"
+      register: command_output
+    - debug:
+        var: command_output.stdout_lines
+

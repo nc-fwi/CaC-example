@@ -1,0 +1,15 @@
+- hosts: "all"
+  become: true
+  tasks:
+    - name: Add puppet repository
+      ansible.builtin.yum:
+        name: https://yum.puppet.com/puppet7-release-el-8.noarch.rpm
+        state: present
+        disable_gpg_check: true
+    - name: Install puppet and other stuff
+      ansible.builtin.yum:
+        name:
+          - puppet-agent
+          - nano
+          - vim
+        state: present

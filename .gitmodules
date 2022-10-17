@@ -1,3 +1,0 @@
-[submodule "modules/puppet-firewall"]
-	path = modules/puppet-firewall
-	url = https://github.com/puppetlabs/puppetlabs-firewall.git

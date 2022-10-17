@@ -1,7 +1,7 @@
 # Web nodes
 node /^web\d+.example.com$/ {
   include 'common_settings'
-  include 'common_firewall'
+  #include 'common_firewall'
   #include 'nginx'
   #include 'dns-client'
 }
@@ -9,6 +9,7 @@ node /^web\d+.example.com$/ {
 # dns nodes
 node /^dns\d+.example.com$/ {
   include 'common_settings'
+  include 'common_firewall'
   #include 'dns-server'
 }
 
