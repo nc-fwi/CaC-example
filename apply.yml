@@ -48,6 +48,7 @@
     # Execute puppet
     - name: Run puppet
       shell: "/opt/puppetlabs/bin/puppet apply --color=false --detailed-exitcodes {{ puppet_manifests }}"
+      ignore_errors: true
       register: command_output
     - debug:
         var: command_output.stdout_lines
