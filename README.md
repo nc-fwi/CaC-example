@@ -65,3 +65,11 @@ Generate ssh config for vagrant hosts
 vagrant ssh-config > vagrant-ssh
 ssh -F vagrant-ssh default
 ```
+
+# ssh keys
+
+```
+ssh-keygen -t rsa -b 4096
+
+ssh -i id_rsa user@ip -p 2200
+```

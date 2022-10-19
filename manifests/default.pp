@@ -1,5 +1,7 @@
 class common_settings {
   include 'common_sshd'
+  include 'local_accounts'
+  include 'common_sudoers'
 
   # Ensure state every day at 1:30
   cron { 'puppet_apply':
@@ -22,10 +24,16 @@ class common_sshd {
     owner   => 'root',
     group   => 'root',
     mode    => '0600',
-    source  => '/etc/puppetlabs/code/environments/production/files/ssh/sshd_config'
+    source  => '/etc/puppetlabs/code/environments/production/files/etc/ssh/sshd_config'
   }
 }
 
-class common_ntp {
-
+class common_sudoers {
+  file { '/etc/sudoers.d/admins_local':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
+    source  => '/etc/puppetlabs/code/environments/production/files/etc/sudoers.d/admins_local'
+  }
 }

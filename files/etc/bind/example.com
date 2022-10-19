@@ -1,5 +1,7 @@
-$TTL 2d
-;$ORIGIN example.com.
+; base zone file for example.com
+$TTL 2d    ; default TTL for zone
+$ORIGIN example.com. ; base domain-name
+; Start of Authority RR defining the key characteristics of the zone (domain)
 @         IN      SOA   ns1.example.com. hostmaster.example.com. (
                                 2003080800 ; serial number
                                 12h        ; refresh
@@ -7,8 +9,9 @@ $TTL 2d
                                 3w         ; expiry
                                 2h         ; minimum
                                 )
+; name server RR for the domain
            IN      NS      ns1.example.com.
-           IN      NS      ns2.example.net.
 ns1        IN      A       192.168.254.2
-mail       IN      A       192.168.254.4
-www        IN      A       10.2.2.4
+web01      IN      A       192.168.56.10
+db01       IN      A       192.168.56.11
+dns01      IN      A       192.168.56.12
