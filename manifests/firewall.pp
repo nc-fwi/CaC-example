@@ -1,4 +1,5 @@
 class common_firewall {
+  # https://forge.puppet.com/modules/puppetlabs/firewall
   include 'my_fw::pre'
   include 'my_fw::post'
 

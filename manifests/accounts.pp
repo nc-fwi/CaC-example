@@ -48,7 +48,7 @@ define account (
     file { "/home/$user/.ssh":
       ensure  => 'directory',
       owner   => $user,
-      group   => $group,
+      group   => $user,
       mode    => '0400',
       seltype => 'ssh_home_t',
       require => File["/home/$user"]
