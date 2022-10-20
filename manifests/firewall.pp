@@ -38,10 +38,13 @@ class my_fw::pre {
   }
 
   # Default firewall rules
-  firewall { '000 accept all icmp':
-    proto  => 'icmp',
-    action => 'accept',
-  } ->
+  if($facts['fqdn'] != 'dns01.example.com') {
+    firewall { '000 accept all icmp':
+      proto  => 'icmp',
+      action => 'accept',
+    }
+  }
+
   firewall { '001 accept all to lo interface':
     proto   => 'all',
     iniface => 'lo',

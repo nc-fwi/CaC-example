@@ -15,16 +15,30 @@ class common_settings {
   # Default packages
   package { ['bind-utils', 'nc', 'wget', 'curl']:
     ensure => present,
+    #before => Class['bind']
+  }
+
+  file { '/data':
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644'
   }
 }
 
 class common_sshd {
+  service { 'sshd':
+    ensure => 'running',
+    enable => true,
+  }
+
   file { '/etc/ssh/sshd_config':
     ensure  => present,
     owner   => 'root',
     group   => 'root',
     mode    => '0600',
-    source  => '/etc/puppetlabs/code/environments/production/files/etc/ssh/sshd_config'
+    source  => '/etc/puppetlabs/code/environments/production/files/etc/ssh/sshd_config',
+    notify => Service['sshd'],
   }
 }
 

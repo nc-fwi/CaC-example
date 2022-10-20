@@ -3,7 +3,8 @@ class module_manager {
   $modules = {
     puppetlabs-firewall => '3.6.0',
     puppetlabs-ntp      => '9.2.0',
-    thias-bind          => '0.5.5'
+    thias-bind          => '0.5.5',
+    puppet-nginx        => '4.0.0'
   }
 
   $modules.each |$module, $version| {

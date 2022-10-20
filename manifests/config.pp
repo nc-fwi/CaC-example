@@ -4,6 +4,7 @@ node /^web\d+.example.com$/ {
   include 'common_settings'
   include 'common_firewall'
   include 'dns_client'
+  include 'nginx_server'
 }
 
 # dns nodes
