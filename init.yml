@@ -12,4 +12,5 @@
           - puppet-agent
           - nano
           - vim
+          - rsync
         state: present

@@ -1,0 +1,44 @@
+- hosts: "all"
+  become: true
+  vars:
+    puppet_files: '/etc/puppetlabs/code/environments/production/files'
+    puppet_manifests: '/etc/puppetlabs/code/environments/production/manifests'
+  tasks:
+    # Ensure that directories exist
+    - name: Create puppet files directory
+      file:
+        path: "{{ puppet_files }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Create puppet manifests directory
+      file:
+        path: "{{ puppet_manifests }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Synchronize puppet files
+      ansible.posix.synchronize:
+        src: files/
+        dest: "{{ puppet_files }}"
+        archive: no
+        recursive: yes
+        delete: yes
+    - name: Synchronize puppet manifests
+      ansible.posix.synchronize:
+        src: manifests/
+        dest: "{{ puppet_manifests }}"
+        recursive: yes
+        delete: yes
+
+    # Execute puppet
+    - name: Run puppet
+      shell: "/opt/puppetlabs/bin/puppet apply --color=false --detailed-exitcodes {{ puppet_manifests }}"
+      ignore_errors: true
+      register: command_output
+    - debug:
+        var: command_output.stdout_lines
+
