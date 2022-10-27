@@ -4,15 +4,6 @@
     puppet_files: '/etc/puppetlabs/code/environments/production/files'
     puppet_manifests: '/etc/puppetlabs/code/environments/production/manifests'
   tasks:
-    - name: Delete puppet files directory
-      file:
-        state: absent
-        path: "{{ puppet_files }}"
-    - name: Delete puppet manifests directory
-      file:
-        state: absent
-        path: "{{ puppet_manifests }}"
-
     # Ensure that directories exist
     - name: Create puppet files directory
       file:
@@ -29,27 +20,29 @@
         group: root
         mode: '0755'
 
-    # Copy manifests and files to hosts
-    - name: Copy puppet files to hosts
-      ansible.builtin.copy:
+    - name: Synchronize puppet files
+      ansible.posix.synchronize:
         src: files/
         dest: "{{ puppet_files }}"
-        owner: root
-        group: root
-        mode: '0755'
-    - name: Copy puppet manifests to hosts
-      ansible.builtin.copy:
+        archive: no
+        recursive: yes
+        delete: yes
+        checksum: yes
+    - name: Synchronize puppet manifests
+      ansible.posix.synchronize:
         src: manifests/
         dest: "{{ puppet_manifests }}"
-        owner: root
-        group: root
-        mode: '0755'
+        archive: no
+        recursive: yes
+        delete: yes
+        checksum: yes
 
     # Execute puppet
     - name: Run puppet
       shell: "/opt/puppetlabs/bin/puppet apply --color=false --detailed-exitcodes {{ puppet_manifests }}"
-      ignore_errors: true
-      register: command_output
+      register: puppet_output
+      changed_when: puppet_output.rc == 2
+      failed_when: puppet_output.rc == 1 or puppet_output.rc >= 3
     - debug:
-        var: command_output.stdout_lines
+        var: puppet_output.stdout_lines
 
